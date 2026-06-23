@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* General Sans — free Neue Montreal-class grotesque (Fontshare CDN). */
+@import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
+
+:root {
+  --selection: rgba(255, 255, 255, 0.18);
+  scroll-behavior: auto; /* Lenis owns scroll */
+}
+
+@layer base {
+  * {
+    border-color: theme("colors.line");
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-ink text-paper font-sans antialiased;
+    overflow-x: hidden;
+    font-feature-settings: "ss01";
+  }
+
+  ::selection {
+    background: var(--selection);
+    color: #fff;
+  }
+
+  /* Hide native cursor on fine-pointer devices (custom cursor takes over). */
+  @media (pointer: fine) {
+    .cursor-hidden,
+    .cursor-hidden * {
+      cursor: none;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display font-medium;
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  /* Light panel inverts text colours within. */
+  .panel-light {
+    @apply bg-panel text-ink;
+  }
+  .panel-light .text-muted {
+    color: theme("colors.muted-light");
+  }
+  .panel-light ::selection {
+    background: rgba(0, 0, 0, 0.14);
+    color: #000;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-mono text-label uppercase text-muted;
+  }
+  .eyebrow::before {
+    content: "✦";
+    @apply text-[0.7em] not-italic;
+  }
+
+  /* The recurring crosshair "+" mark. */
+  .crosshair {
+    @apply pointer-events-none absolute h-3 w-3 opacity-40;
+  }
+  .crosshair::before,
+  .crosshair::after {
+    content: "";
+    position: absolute;
+    background: currentColor;
+  }
+  .crosshair::before {
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    transform: translateX(-50%);
+  }
+  .crosshair::after {
+    top: 50%;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    transform: translateY(-50%);
+  }
+
+  .pill {
+    @apply inline-flex items-center justify-center rounded-full border px-5 py-2 font-mono text-label uppercase transition-colors duration-300;
+  }
+
+  /* Line-art outline typography (footer) — repeating horizontal lines. */
+  .line-art {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      currentColor 0,
+      currentColor 1px,
+      transparent 1px,
+      transparent 6px
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@layer utilities {
+  .reveal-mask {
+    overflow: hidden;
+    display: block;
+  }
+  .pre-reveal {
+    opacity: 0;
+  }
+  .will-transform {
+    will-change: transform;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .pre-reveal {
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}

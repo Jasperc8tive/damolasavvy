@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Bash('/c/Program Files \\(x86\\)/Microsoft/Edge/Application/msedge.exe' --headless=new --disable-gpu --no-pdf-header-footer --virtual-time-budget=5000 --print-to-pdf=C:/damola-savvy/damola_resume.pdf file:///C:/Users/Mayowa/AppData/Local/Temp/claude/c--damola-savvy/cdc622ac-64a4-4143-b19c-08b6173e5e33/scratchpad/resume.html)",
+      "Bash(sleep 1)",
+      "Bash(ls -la \"c:/damola-savvy/damola_resume.pdf\")",
+      "Bash(echo \"PDF created\")",
+      "Bash(echo \"PDF MISSING\")"
+    ]
+  }
+}
