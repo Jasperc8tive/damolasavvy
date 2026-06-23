@@ -8,9 +8,9 @@ A premium, motion-driven digital experience positioning **Damola Doyin** as a We
 - **Tailwind CSS** (custom dark design system)
 - **GSAP + ScrollTrigger** — pinning, scrubbing, horizontal scroll, mask reveals
 - **Lenis** — momentum smooth scrolling, synced to ScrollTrigger
-- **Framer Motion** — preloader + hero entrance choreography
+- **Framer Motion** — menu overlay + entrance choreography
 - **SplitType** — character/word/line text reveals
-- **React Three Fiber + drei + three** — selective WebGL (hero + testimonials only)
+- **React Three Fiber + drei + three** — selective WebGL (hero + expertise ring only)
 - **lucide-react** — icons
 
 ## Getting Started
@@ -70,15 +70,12 @@ public/         videos/ (6 project clips), logos/ (6 brand logos)
 3. No env vars required. Deploy.
 4. Set your custom domain and update `SITE.url` in `lib/constants.ts`.
 
-## Before You Ship — fill in the placeholders
+## Before You Ship
 
-In **`lib/constants.ts`** replace the placeholder links (currently marked "placeholder" in the contact section):
+Email, WhatsApp, LinkedIn and the live `url` are already set in **`lib/constants.ts`**. The only remaining placeholder is **Calendly** (marked "placeholder" in the contact section) — drop in a real link when ready:
 
 ```ts
-whatsapp: "https://wa.me/<your-number>",
-linkedin: "https://www.linkedin.com/in/<you>",
 calendly: "https://calendly.com/<you>",
-url:      "https://<your-domain>",
 ```
 
 Optionally compress `public/videos/*.mp4` and add posters as noted above.

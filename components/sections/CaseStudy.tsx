@@ -75,8 +75,7 @@ export function CaseStudy({ project }: { project: Project }) {
         {/* Video frame */}
         <div
           data-frame
-          className="relative aspect-video overflow-hidden rounded-2xl border border-line bg-surface-2"
-          style={{ willChange: "clip-path" }}
+          className="will-clip relative aspect-video overflow-hidden rounded-2xl border border-line bg-surface-2"
         >
           <div data-media className="absolute inset-0 will-transform">
             <VideoReveal src={project.video} />

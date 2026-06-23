@@ -47,7 +47,6 @@
 
   h1, h2, h3, h4 {
     @apply font-display font-medium;
-    text-wrap: balance;
   }
 }
 
@@ -136,6 +135,18 @@
   }
   .will-transform {
     will-change: transform;
+  }
+  .will-clip {
+    will-change: clip-path;
+  }
+
+  /* Faint diagonal contour lines (hero backdrop). */
+  .contour-lines {
+    background-image: repeating-linear-gradient(
+      115deg,
+      transparent 0 80px,
+      rgba(255, 255, 255, 0.4) 80px 81px
+    );
   }
 }
 

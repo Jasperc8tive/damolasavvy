@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useIsDesktop } from "@/hooks/useMediaQuery";
+import { cn } from "@/lib/cn";
 
 /**
  * Trionn-style custom cursor: a small dot + a lagging ring that grows over
@@ -50,8 +51,10 @@ export function CustomCursor() {
     <div className="pointer-events-none fixed inset-0 z-[120] mix-blend-difference" aria-hidden>
       <div
         ref={ring}
-        className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#c8c8c8] transition-[width,height,opacity] duration-300"
-        style={{ width: hovering ? 56 : 30, height: hovering ? 56 : 30, opacity: hovering ? 1 : 0.6 }}
+        className={cn(
+          "absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#c8c8c8] transition-all duration-300",
+          hovering ? "h-14 w-14 opacity-100" : "h-[30px] w-[30px] opacity-60"
+        )}
       />
       <div
         ref={dot}

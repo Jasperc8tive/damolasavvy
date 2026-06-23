@@ -34,13 +34,7 @@ export function Hero() {
         <Lazy3D scene="hero" />
       </div>
       {/* faint contour lines */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[1] opacity-[0.12]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(115deg, transparent 0 80px, rgba(255,255,255,0.4) 80px 81px)",
-        }}
-      />
+      <div className="contour-lines pointer-events-none absolute inset-0 z-[1] opacity-[0.12]" />
 
       <div data-hero-inner className="container relative z-10 mt-auto">
         <BlurText

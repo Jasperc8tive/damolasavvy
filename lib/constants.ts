@@ -8,7 +8,7 @@ export const SITE = {
     "Damola Doyin is a Website Developer, Digital Experience Designer and Growth Strategist building high-performing websites and digital experiences that drive measurable business growth.",
   intro: "Websites, digital experiences and growth systems built for clarity, scale and impact.",
   est: "2021",
-  url: "https://damoladoyin.com",
+  url: "https://damolasavvy.vercel.app",
   location: "Lagos, Nigeria",
   timezone: "Africa/Lagos",
   email: "damdoyin123@gmail.com",

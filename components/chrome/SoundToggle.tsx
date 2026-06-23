@@ -18,39 +18,60 @@ export function SoundToggle({ className }: { className?: string }) {
     if (ctxRef.current) return;
     const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
     const ctx = new AC();
+
     const master = ctx.createGain();
     master.gain.value = 0;
+
+    // Warm lowpass so the pad stays soft, not buzzy.
+    const filter = ctx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.value = 900;
+    filter.Q.value = 0.6;
+    filter.connect(master);
     master.connect(ctx.destination);
 
-    // Two detuned low oscillators + a slow LFO for a calm ambient bed.
-    [55, 82.5].forEach((freq, i) => {
+    // An audible A-minor pad spread across octaves (mid-range = plays on any speaker),
+    // each voice slightly detuned for a lush, evolving ambient texture.
+    const voices = [
+      { freq: 220.0, type: "sine" as OscillatorType, gain: 0.5, detune: -4 },
+      { freq: 261.63, type: "sine" as OscillatorType, gain: 0.34, detune: 5 },
+      { freq: 329.63, type: "triangle" as OscillatorType, gain: 0.26, detune: -6 },
+      { freq: 440.0, type: "sine" as OscillatorType, gain: 0.18, detune: 7 },
+    ];
+    voices.forEach((v) => {
       const osc = ctx.createOscillator();
-      osc.type = i === 0 ? "sine" : "triangle";
-      osc.frequency.value = freq;
+      osc.type = v.type;
+      osc.frequency.value = v.freq;
+      osc.detune.value = v.detune;
       const g = ctx.createGain();
-      g.gain.value = i === 0 ? 0.6 : 0.25;
-      osc.connect(g).connect(master);
+      g.gain.value = v.gain;
+      osc.connect(g).connect(filter);
       osc.start();
     });
+
+    // Slow filter-cutoff LFO for gentle movement.
     const lfo = ctx.createOscillator();
-    lfo.frequency.value = 0.08;
+    lfo.frequency.value = 0.06;
     const lfoGain = ctx.createGain();
-    lfoGain.gain.value = 0.015;
-    lfo.connect(lfoGain).connect(master.gain);
+    lfoGain.gain.value = 350;
+    lfo.connect(lfoGain).connect(filter.frequency);
     lfo.start();
 
     ctxRef.current = ctx;
     gainRef.current = master;
   };
 
-  const toggle = () => {
+  const toggle = async () => {
     ensureGraph();
     const ctx = ctxRef.current!;
     const master = gainRef.current!;
-    if (ctx.state === "suspended") ctx.resume();
+    // Autoplay policy: context starts suspended; resume on this user gesture.
+    if (ctx.state !== "running") await ctx.resume();
     const next = !on;
-    master.gain.cancelScheduledValues(ctx.currentTime);
-    master.gain.linearRampToValueAtTime(next ? 0.05 : 0, ctx.currentTime + 0.6);
+    const now = ctx.currentTime;
+    master.gain.cancelScheduledValues(now);
+    master.gain.setValueAtTime(master.gain.value, now);
+    master.gain.linearRampToValueAtTime(next ? 0.16 : 0, now + 0.8);
     setOn(next);
   };
 
@@ -64,7 +85,7 @@ export function SoundToggle({ className }: { className?: string }) {
     <button
       type="button"
       onClick={toggle}
-      aria-pressed={on}
+      aria-pressed={on ? "true" : "false"}
       aria-label={on ? "Mute ambient sound" : "Play ambient sound"}
       className={cn(
         "pill gap-2 border-white/40 backdrop-blur-sm hover:bg-white/10",
@@ -78,9 +99,8 @@ export function SoundToggle({ className }: { className?: string }) {
             key={i}
             className={cn(
               "w-[2px] bg-current transition-all duration-300",
-              on ? "animate-pulse" : ""
+              on ? `${["h-[6px]", "h-[9px]", "h-[12px]"][i]} animate-pulse` : "h-[4px]"
             )}
-            style={{ height: on ? 6 + i * 3 : 4 }}
           />
         ))}
       </span>
