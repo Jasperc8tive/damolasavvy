@@ -4,80 +4,73 @@ import { useEffect, useRef, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/cn";
 
+const TRACK = "/audio/ambient.mp3";
+const TARGET_VOLUME = 0.55;
+const FADE_MS = 800;
+
 /**
- * Sound toggle — a Trionn signature. Generates a soft ambient drone with the
- * WebAudio API (no audio asset required). Off by default; only starts on a
- * user gesture, per browser autoplay rules.
+ * Sound toggle — a Trionn signature. Plays a looping ambient track
+ * (ES_Nostalgia · Aiyo) with a smooth fade in/out. Off by default; only
+ * starts on a user gesture, per browser autoplay rules.
  */
 export function SoundToggle({ className }: { className?: string }) {
   const [on, setOn] = useState(false);
-  const ctxRef = useRef<AudioContext | null>(null);
-  const gainRef = useRef<GainNode | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const fadeRef = useRef<number | null>(null);
 
-  const ensureGraph = () => {
-    if (ctxRef.current) return;
-    const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    const ctx = new AC();
+  const ensureAudio = () => {
+    if (audioRef.current) return audioRef.current;
+    const audio = new Audio(TRACK);
+    audio.loop = true;
+    audio.preload = "none";
+    audio.volume = 0;
+    audioRef.current = audio;
+    return audio;
+  };
 
-    const master = ctx.createGain();
-    master.gain.value = 0;
+  /** Smoothly ramp volume, then pause once silent. */
+  const fadeTo = (target: number, onDone?: () => void) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (fadeRef.current) cancelAnimationFrame(fadeRef.current);
 
-    // Warm lowpass so the pad stays soft, not buzzy.
-    const filter = ctx.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 900;
-    filter.Q.value = 0.6;
-    filter.connect(master);
-    master.connect(ctx.destination);
-
-    // An audible A-minor pad spread across octaves (mid-range = plays on any speaker),
-    // each voice slightly detuned for a lush, evolving ambient texture.
-    const voices = [
-      { freq: 220.0, type: "sine" as OscillatorType, gain: 0.5, detune: -4 },
-      { freq: 261.63, type: "sine" as OscillatorType, gain: 0.34, detune: 5 },
-      { freq: 329.63, type: "triangle" as OscillatorType, gain: 0.26, detune: -6 },
-      { freq: 440.0, type: "sine" as OscillatorType, gain: 0.18, detune: 7 },
-    ];
-    voices.forEach((v) => {
-      const osc = ctx.createOscillator();
-      osc.type = v.type;
-      osc.frequency.value = v.freq;
-      osc.detune.value = v.detune;
-      const g = ctx.createGain();
-      g.gain.value = v.gain;
-      osc.connect(g).connect(filter);
-      osc.start();
-    });
-
-    // Slow filter-cutoff LFO for gentle movement.
-    const lfo = ctx.createOscillator();
-    lfo.frequency.value = 0.06;
-    const lfoGain = ctx.createGain();
-    lfoGain.gain.value = 350;
-    lfo.connect(lfoGain).connect(filter.frequency);
-    lfo.start();
-
-    ctxRef.current = ctx;
-    gainRef.current = master;
+    const start = audio.volume;
+    const startedAt = performance.now();
+    const step = (now: number) => {
+      const t = Math.min((now - startedAt) / FADE_MS, 1);
+      audio.volume = start + (target - start) * t;
+      if (t < 1) {
+        fadeRef.current = requestAnimationFrame(step);
+      } else {
+        fadeRef.current = null;
+        onDone?.();
+      }
+    };
+    fadeRef.current = requestAnimationFrame(step);
   };
 
   const toggle = async () => {
-    ensureGraph();
-    const ctx = ctxRef.current!;
-    const master = gainRef.current!;
-    // Autoplay policy: context starts suspended; resume on this user gesture.
-    if (ctx.state !== "running") await ctx.resume();
+    const audio = ensureAudio();
     const next = !on;
-    const now = ctx.currentTime;
-    master.gain.cancelScheduledValues(now);
-    master.gain.setValueAtTime(master.gain.value, now);
-    master.gain.linearRampToValueAtTime(next ? 0.16 : 0, now + 0.8);
     setOn(next);
+
+    if (next) {
+      try {
+        await audio.play(); // user gesture satisfies autoplay policy
+        fadeTo(TARGET_VOLUME);
+      } catch {
+        setOn(false); // playback was blocked
+      }
+    } else {
+      fadeTo(0, () => audio.pause());
+    }
   };
 
   useEffect(() => {
     return () => {
-      ctxRef.current?.close();
+      if (fadeRef.current) cancelAnimationFrame(fadeRef.current);
+      audioRef.current?.pause();
+      audioRef.current = null;
     };
   }, []);
 
