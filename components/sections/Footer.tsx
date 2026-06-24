@@ -18,18 +18,27 @@ export function Footer() {
     <footer id="contact" className="relative overflow-hidden bg-ink pt-section">
       <div className="container">
         <p className="eyebrow mb-10">Let&apos;s build</p>
-        <BlurText as="h2" type="words" className="max-w-5xl font-display text-display-xl font-semibold">
-          Ready to build something unforgettable?
-        </BlurText>
+        <h2 className="max-w-5xl font-display text-display-xl font-semibold">
+          <BlurText as="span" type="words" className="inline">
+            Ready to build something
+          </BlurText>{" "}
+          <BlurText as="span" type="words" className="serif-accent inline text-gold-shimmer">
+            unforgettable?
+          </BlurText>
+        </h2>
 
         <div className="mt-12 flex flex-wrap items-center gap-4">
           <a
             href={`mailto:${SITE.email}`}
-            className="pill border-white bg-white px-7 py-3.5 text-ink hover:bg-transparent hover:text-white"
+            className="pill border-accent bg-accent px-7 py-3.5 font-medium text-ink transition-colors duration-300 hover:bg-transparent hover:text-accent-bright"
           >
             Let&apos;s Talk <ArrowUpRight className="ml-2 h-4 w-4" />
           </a>
-          <span className="font-mono text-label uppercase text-muted">
+          <span className="inline-flex items-center gap-2 font-mono text-label uppercase text-muted">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent-bright" />
+            </span>
             Currently open to new projects
           </span>
         </div>
@@ -42,9 +51,9 @@ export function Footer() {
               href={c.href}
               target={c.label === "Email" ? undefined : "_blank"}
               rel="noopener noreferrer"
-              className="group flex items-center gap-4 rounded-xl border border-line p-5 transition-colors hover:border-paper/30 hover:bg-surface-2"
+              className="group flex items-center gap-4 rounded-xl border border-line p-5 transition-colors duration-300 hover:border-line-accent hover:bg-surface-2"
             >
-              <c.icon className="h-5 w-5" />
+              <c.icon className="h-5 w-5 text-muted transition-colors duration-300 group-hover:text-accent" />
               <span className="flex-1">
                 <span className="flex items-center gap-2 font-mono text-label uppercase text-muted">
                   {c.label}
@@ -56,7 +65,7 @@ export function Footer() {
                 </span>
                 <span className="mt-0.5 block text-paper/90">{c.value}</span>
               </span>
-              <ArrowUpRight className="h-4 w-4 text-muted transition-transform group-hover:rotate-45" />
+              <ArrowUpRight className="h-4 w-4 text-muted transition-all duration-300 group-hover:rotate-45 group-hover:text-accent" />
             </a>
           ))}
         </div>

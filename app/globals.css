@@ -6,7 +6,9 @@
 @import url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
 
 :root {
-  --selection: rgba(255, 255, 255, 0.18);
+  --selection: rgba(198, 161, 91, 0.26); /* champagne gold */
+  --gold: #c6a15b;
+  --gold-bright: #e7c988;
   scroll-behavior: auto; /* Lenis owns scroll */
 }
 
@@ -30,6 +32,16 @@
   ::selection {
     background: var(--selection);
     color: #fff;
+  }
+
+  body {
+    /* warm cinematic vignette — keeps the eye centred, reads as premium */
+    background-image: radial-gradient(
+      130% 100% at 50% -10%,
+      rgba(198, 161, 91, 0.06) 0%,
+      transparent 45%
+    );
+    background-attachment: fixed;
   }
 
   /* Hide native cursor on fine-pointer devices (custom cursor takes over). */
@@ -68,7 +80,48 @@
   }
   .eyebrow::before {
     content: "✦";
-    @apply text-[0.7em] not-italic;
+    @apply text-[0.7em] not-italic text-accent;
+  }
+  .panel-light .eyebrow::before {
+    color: theme("colors.accent-deep");
+  }
+
+  /* Gold gradient text — for editorial accents & key numerals. */
+  .text-gold {
+    background-image: linear-gradient(
+      100deg,
+      theme("colors.accent-deep") 0%,
+      theme("colors.accent-bright") 28%,
+      theme("colors.accent") 55%,
+      theme("colors.accent-bright") 82%,
+      theme("colors.accent-deep") 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-gold-shimmer {
+    @apply text-gold animate-shimmer;
+  }
+
+  /* Editorial serif italic — the luxury display voice. */
+  .serif-accent {
+    @apply font-serif italic font-normal;
+    letter-spacing: -0.01em;
+  }
+
+  /* Hairline rule with a gold core that fades at both ends. */
+  .rule-gold {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      theme("colors.line-accent") 12%,
+      theme("colors.accent") 50%,
+      theme("colors.line-accent") 88%,
+      transparent
+    );
   }
 
   /* The recurring crosshair "+" mark. */
@@ -98,6 +151,13 @@
 
   .pill {
     @apply inline-flex items-center justify-center rounded-full border px-5 py-2 font-mono text-label uppercase transition-colors duration-300;
+  }
+  .pill:hover {
+    border-color: theme("colors.line-accent");
+    color: theme("colors.accent-bright");
+  }
+  .panel-light .pill:hover {
+    color: theme("colors.accent-deep");
   }
 
   /* Line-art outline typography (footer) — repeating horizontal lines. */

@@ -33,11 +33,30 @@ export function Accordion({
             <button
               onClick={() => setOpen(isOpen ? null : i)}
               aria-expanded={isOpen}
-              className="flex w-full items-center gap-6 py-7 text-left"
+              className="group flex w-full items-center gap-6 py-7 text-left"
             >
-              <span className="font-mono text-label opacity-50">{item.n}</span>
-              <span className="flex-1 font-display text-display-sm">{item.title}</span>
-              <span className={cn("text-2xl transition-transform duration-500", isOpen && "rotate-45")}>
+              <span
+                className={cn(
+                  "font-mono text-label transition-colors duration-300",
+                  isOpen ? "text-accent-deep opacity-100" : "opacity-50"
+                )}
+              >
+                {item.n}
+              </span>
+              <span
+                className={cn(
+                  "flex-1 font-display text-display-sm transition-colors duration-300 group-hover:text-accent-deep",
+                  isOpen && "text-accent-deep"
+                )}
+              >
+                {item.title}
+              </span>
+              <span
+                className={cn(
+                  "text-2xl transition-all duration-500",
+                  isOpen ? "rotate-45 text-accent-deep" : "group-hover:text-accent-deep"
+                )}
+              >
                 +
               </span>
             </button>

@@ -16,7 +16,7 @@ export function LogoMarquee() {
             </span>
             {p.name}
           </span>
-          <span className="opacity-30">✦</span>
+          <span className="text-accent opacity-50">✦</span>
         </span>
       ))}
     </div>

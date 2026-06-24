@@ -48,13 +48,13 @@ export function CaseStudy({ project }: { project: Project }) {
   }, [reduced]);
 
   return (
-    <article ref={ref} className="border-t border-line py-[8vh]">
+    <article ref={ref} className="group/case border-t border-line py-[8vh]">
       <div className="container">
         {/* Header row */}
         <div className="mb-8 flex flex-wrap items-end justify-between gap-6">
           <div className="flex items-center gap-5">
-            <span className="font-mono text-label text-muted">({project.index})</span>
-            <span className="relative h-11 w-11 overflow-hidden rounded-lg bg-white">
+            <span className="font-mono text-label text-accent">({project.index})</span>
+            <span className="relative h-11 w-11 overflow-hidden rounded-lg bg-white ring-1 ring-line-accent">
               <Image src={project.logo} alt={`${project.name} logo`} fill className="object-cover" sizes="44px" />
             </span>
             <BlurText as="h3" type="chars" stagger={0.03} className="font-display text-display-md">
@@ -65,24 +65,29 @@ export function CaseStudy({ project }: { project: Project }) {
             href={project.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 font-mono text-label uppercase"
+            className="group/link inline-flex items-center gap-2 font-mono text-label uppercase transition-colors duration-300 hover:text-accent-bright"
           >
             Explore project
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:rotate-45" />
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/link:rotate-45" />
           </a>
         </div>
 
         {/* Video frame */}
         <div
           data-frame
-          className="will-clip relative aspect-video overflow-hidden rounded-2xl border border-line bg-surface-2"
+          className="will-clip relative aspect-video overflow-hidden rounded-2xl border border-line bg-surface-2 transition-colors duration-500 group-hover/case:border-line-accent"
         >
           <div data-media className="absolute inset-0 will-transform">
             <VideoReveal src={project.video} />
           </div>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          {/* gold edge-glow on hover */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 ring-1 ring-inset ring-accent/30 transition-opacity duration-500 group-hover/case:opacity-100"
+          />
           <p className="absolute bottom-5 left-6 max-w-md font-mono text-xs uppercase tracking-wider text-white/70">
-            {project.industry} · {project.status}
+            <span className="text-accent-bright">{project.industry}</span> · {project.status}
           </p>
         </div>
 

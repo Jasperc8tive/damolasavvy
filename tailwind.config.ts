@@ -14,20 +14,26 @@ const config: Config = {
     },
     extend: {
       colors: {
-        // Monochrome system — Trionn-style.
-        ink: "#000000",
-        paper: "#FFFFFF",
-        // light panel greys
-        panel: "#E9E9E7",
-        "panel-2": "#D6D6D3",
-        // dark surfaces
-        surface: "#0A0A0A",
-        "surface-2": "#141414",
-        // neutral text
-        muted: "#8A8A8A",
-        "muted-light": "#6B6B6B",
-        line: "rgba(255,255,255,0.10)",
-        "line-dark": "rgba(0,0,0,0.14)",
+        // Dark editorial luxury — warm near-black canvas, warm paper, champagne gold accent.
+        ink: "#0A0908", // warm off-black (was pure #000)
+        paper: "#F4F1EA", // warm bone white (was pure #FFF)
+        "paper-pure": "#FFFFFF",
+        // light panel — warm ivory, not cold grey
+        panel: "#ECE7DC",
+        "panel-2": "#DCD5C6",
+        // dark surfaces (warm)
+        surface: "#0E0C0A",
+        "surface-2": "#161310",
+        // champagne-gold accent system
+        accent: "#C6A15B", // champagne gold
+        "accent-bright": "#E7C988", // highlight gold
+        "accent-deep": "#9A7B3F", // deep antique gold
+        // neutral text (warm-tinted)
+        muted: "#8B857B",
+        "muted-light": "#6A6457",
+        line: "rgba(244,241,234,0.10)",
+        "line-dark": "rgba(20,16,10,0.14)",
+        "line-accent": "rgba(198,161,91,0.28)",
       },
       fontFamily: {
         // General Sans = free Neue Montreal-class grotesque (loaded via Fontshare CDN)
@@ -61,10 +67,22 @@ const config: Config = {
           from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        // slow champagne sheen sweeping across gold text/rules
+        shimmer: {
+          "0%": { backgroundPosition: "200% center" },
+          "100%": { backgroundPosition: "-200% center" },
+        },
+        // barely-there breathing for ambient accents
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
       },
       animation: {
         marquee: "marquee 32s linear infinite",
         "fade-up": "fade-up 0.7s cubic-bezier(0.16,1,0.3,1) both",
+        shimmer: "shimmer 6s linear infinite",
+        float: "float 7s ease-in-out infinite",
       },
     },
   },

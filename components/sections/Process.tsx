@@ -35,8 +35,10 @@ export function Process() {
 
         <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {PROCESS_STAGES.map((stage) => (
-            <div key={stage.n} data-step className="border-t border-line pt-5">
-              <span className="font-mono text-label uppercase text-muted">Step — {stage.n}</span>
+            <div key={stage.n} data-step className="group border-t border-line pt-5 transition-colors duration-300 hover:border-line-accent">
+              <span className="font-mono text-label uppercase text-muted">
+                Step — <span className="text-accent">{stage.n}</span>
+              </span>
               <h3 className="mt-4 font-display text-display-sm">{stage.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-muted">{stage.body}</p>
             </div>

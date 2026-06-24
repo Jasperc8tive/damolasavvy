@@ -9,16 +9,23 @@ export function StatementIntro() {
     <Panel tone="light" crosshairs className="flex min-h-[80svh] items-center">
       <div className="container max-w-5xl">
         <p className="eyebrow mb-10">The difference</p>
-        <BlurText as="h2" type="words" className="font-display text-display-lg">
-          Most businesses have websites. Very few have digital experiences.
-        </BlurText>
-        <BlurText
-          as="p"
-          type="words"
-          className="mt-6 font-display text-display-lg text-muted-light"
-        >
-          I build the difference.
-        </BlurText>
+        <h2 className="font-display text-display-lg">
+          <BlurText as="span" type="words" className="block">
+            Most businesses have websites.
+          </BlurText>
+          <span className="block">
+            <BlurText as="span" type="words" className="inline">
+              Very few have
+            </BlurText>{" "}
+            <BlurText as="span" type="words" className="serif-accent inline text-accent-deep">
+              digital experiences.
+            </BlurText>
+          </span>
+        </h2>
+        <p className="mt-8 font-display text-display-md text-muted-light">
+          I build{" "}
+          <span className="serif-accent text-accent-deep">the difference.</span>
+        </p>
       </div>
     </Panel>
   );
